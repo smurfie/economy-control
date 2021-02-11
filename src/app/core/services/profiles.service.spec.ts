@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { DexieService } from './dexie.service';
-import { Profile, ProfilesService } from './profiles.service';
+import { Profile, ProfilesService, ProfileWithID } from './profiles.service';
 
 describe('ProfilesService', () => {
   let service: ProfilesService;
+  const MOCK_PROFILE: Profile = {
+    name: 'Profile1',
+  };
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -21,96 +24,61 @@ describe('ProfilesService', () => {
 
   it('should get empty list', async () => {
     const profiles = await service.getAll();
-
     expect(profiles.length).toBe(0);
   });
 
   it('should get the element by id', async () => {
-    const profile: Profile = {
-      name: 'Profile1',
-    };
-    const id = await service.add(profile);
-    const profileAfterGet = await service.get(id);
-
-    expect(profileAfterGet?.name == profile.name).toBe(true);
+    const id = await service.add(MOCK_PROFILE);
+    const profile = await service.get(id);
+    expect(profile?.name == MOCK_PROFILE.name).toBe(true);
   });
 
   it('should get undefined', async () => {
     let unexistantProfile = await service.get(4);
-
     expect(unexistantProfile).toBe(undefined);
   });
 
   it('should add one element', async () => {
-    const profile: Profile = {
-      name: 'Profile1',
-    };
-    await service.add(profile);
+    await service.add(MOCK_PROFILE);
     const profiles = await service.getAll();
-
     expect(profiles.length).toBe(1);
   });
 
   it('should update the element', async () => {
-    const profile: Profile = {
-      name: 'Profile1',
+    const id = await service.add(MOCK_PROFILE);
+    let profileWithId = {
+      id: id,
+      name: 'Profile2',
     };
-    const id = await service.add(profile);
-    let profileAfterGet = await service.get(id);
-
-    expect(profileAfterGet).not.toBe(undefined);
-
-    if (profileAfterGet) {
-      profileAfterGet.name = 'Profile2';
-      await service.update(profileAfterGet);
-      let profileAfterUpdate = await service.get(id);
-
-      expect(profileAfterUpdate?.name === profileAfterGet.name).toBe(true);
-    }
+    await service.update(profileWithId);
+    let profileAfterUpdate = await service.get(id);
+    expect(profileAfterUpdate?.name === profileWithId.name).toBe(true);
   });
 
   it('should not update an element that does not exists', async () => {
-    const profile: Profile = {
-      name: 'Profile1',
+    const id = await service.add(MOCK_PROFILE);
+    let profileWithId = {
+      id: id + 1,
+      name: 'Profile2',
     };
-    const id = await service.add(profile);
-    let profileAfterGet = await service.get(id);
-
-    expect(profileAfterGet).not.toBe(undefined);
-
-    if (profileAfterGet) {
-      profileAfterGet.id++;
-      profileAfterGet.name = 'Profile2';
-      await service.update(profileAfterGet);
-      let profileBeforeUpdate = await service.get(id);
-
-      expect(profileBeforeUpdate?.name === profile.name).toBe(true);
-
-      let profileAfterUpdate = await service.get(id + 1);
-
-      expect(profileAfterUpdate).toBe(undefined);
-    }
+    await service.update(profileWithId);
+    let profileAfterUpdate = await service.get(id);
+    expect(profileAfterUpdate?.name === MOCK_PROFILE.name).toBe(true);
+    let unexistantProfile = await service.get(id + 1);
+    expect(unexistantProfile).toBe(undefined);
   });
 
   it('should delete one element', async () => {
-    const profile: Profile = {
-      name: 'Profile1',
-    };
-    const id = await service.add(profile);
+    const id = await service.add(MOCK_PROFILE);
     await service.remove(id);
     const profiles = await service.getAll();
-
     expect(profiles.length).toBe(0);
   });
 
   it('should not delete any element if id does not exists', async () => {
-    const profile: Profile = {
-      name: 'Profile1',
-    };
-    const id = await service.add(profile);
+    const id = await service.add(MOCK_PROFILE);
     await service.remove(id + 1);
     const profiles = await service.getAll();
-
     expect(profiles.length).toBe(1);
   });
 });
