@@ -4,7 +4,7 @@ export class DexieService extends Dexie {
   constructor() {
     super('EconomyControlDatabase');
     this.version(1).stores({
-      profiles: '++id, name',
+      profiles: '++id, &name',
     });
   }
 }
