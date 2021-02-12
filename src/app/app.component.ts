@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfilesService, ProfileWithID } from './core/services/profiles.service';
+import { ProfilesService } from './core/services/profiles.service';
+import { ProfileWithID } from './shared/models/profile.model';
 
 @Component({
   selector: 'app-root',

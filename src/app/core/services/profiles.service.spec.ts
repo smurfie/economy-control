@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { DexieService } from './dexie.service';
-import { Profile, ProfilesService, ProfileWithID } from './profiles.service';
+import { Profile, ProfileWithID } from 'src/app/shared/models/profile.model';
+import { CoreModule } from '../core.module';
+import { DexieService } from './dexie/dexie.service';
+import { ProfilesService } from './profiles.service';
 
 describe('ProfilesService', () => {
   let service: ProfilesService;
@@ -13,7 +15,7 @@ describe('ProfilesService', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [ProfilesService, DexieService],
+      imports: [CoreModule],
     });
 
     let serviceDatabase = TestBed.inject(DexieService);
@@ -62,7 +64,7 @@ describe('ProfilesService', () => {
 
   it('should update the element', async () => {
     const id = await service.add(MOCK_PROFILE);
-    let profileWithId = {
+    let profileWithId: ProfileWithID = {
       id: id,
       name: 'Profile2',
     };
@@ -75,7 +77,7 @@ describe('ProfilesService', () => {
     let error;
     await service.add(MOCK_PROFILE);
     const id = await service.add(MOCK_PROFILE_2);
-    let profileWithId = {
+    let profileWithId: ProfileWithID = {
       id: id,
       name: 'Profile1',
     };
@@ -91,7 +93,7 @@ describe('ProfilesService', () => {
 
   it('should not update an element that does not exists', async () => {
     const id = await service.add(MOCK_PROFILE);
-    let profileWithId = {
+    let profileWithId: ProfileWithID = {
       id: id + 1,
       name: 'Profile2',
     };
