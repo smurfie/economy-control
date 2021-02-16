@@ -3,6 +3,8 @@ import { Profile, ProfileWithID } from 'src/app/shared/models/profile.model';
 import { ProfilesService } from '../profiles.service';
 import { DexieService } from './dexie.service';
 
+const DEFAULT_PROFILE_STRING = 'defaultProfile';
+
 @Injectable()
 export class ProfilesDexieService implements ProfilesService {
   table: Dexie.Table<ProfileWithID, number>;
@@ -33,5 +35,22 @@ export class ProfilesDexieService implements ProfilesService {
 
   exists(name: string): Promise<boolean> {
     return this.table.get({ name: name }, (item) => (item ? true : false));
+  }
+
+  getDefault(): Promise<ProfileWithID | undefined> {
+    const profileId = localStorage.getItem(DEFAULT_PROFILE_STRING);
+    let promise;
+
+    if (profileId) {
+      promise = this.get(parseInt(profileId));
+    } else {
+      promise = Promise.resolve(undefined);
+    }
+    return promise;
+  }
+
+  setDefault(id: number): Promise<void> {
+    localStorage.setItem(DEFAULT_PROFILE_STRING, String(id));
+    return Promise.resolve();
   }
 }

@@ -128,4 +128,17 @@ describe('ProfilesService', () => {
     const exists = await service.exists(MOCK_PROFILE_2.name);
     expect(exists).toBe(false);
   });
+
+  it('should return undefined', async () => {
+    const profile = await service.getDefault();
+    expect(profile).toBeUndefined();
+  });
+
+  it('should return that the default profile', async () => {
+    const id = await service.add(MOCK_PROFILE);
+    await service.add(MOCK_PROFILE_2);
+    await service.setDefault(id);
+    const profile = await service.getDefault();
+    expect(profile?.name).toBe(MOCK_PROFILE.name);
+  });
 });

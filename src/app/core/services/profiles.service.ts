@@ -47,11 +47,11 @@ export abstract class ProfilesService {
   /**
    * Return the default profile
    */
-  //abstract getDefault(): Promise<ProfileWithID>;
+  abstract getDefault(): Promise<ProfileWithID | undefined>;
 
   /**
-   * Sets the profile to be the default profile
+   * Sets the profile with id passed as parameter to be the default profile
    * @param profile
    */
-  //abstract setDefault(profile: ProfileWithID): Promise<void>;
+  abstract setDefault(id: number): Promise<void>;
 }
