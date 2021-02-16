@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Profile, ProfileWithID } from 'src/app/shared/models/profile.model';
+import { ProfilesDexieService } from './dexie/profiles.dexie.service';
 
 @Injectable({
   providedIn: 'root',
+  useClass: ProfilesDexieService,
 })
 export abstract class ProfilesService {
   constructor() {}
@@ -32,7 +34,24 @@ export abstract class ProfilesService {
 
   /**
    * Remove the profile with the id passed as parameter
-   * @param profile
+   * @param id
    */
   abstract remove(id: number): Promise<void>;
+
+  /**
+   * Return if exists a profile with the same name
+   * @param name
+   */
+  abstract exists(name: string): Promise<boolean>;
+
+  /**
+   * Return the default profile
+   */
+  //abstract getDefault(): Promise<ProfileWithID>;
+
+  /**
+   * Sets the profile to be the default profile
+   * @param profile
+   */
+  //abstract setDefault(profile: ProfileWithID): Promise<void>;
 }

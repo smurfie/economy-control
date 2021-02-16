@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { Profile, ProfileWithID } from 'src/app/shared/models/profile.model';
-import { CoreModule } from '../core.module';
 import { DexieService } from './dexie/dexie.service';
 import { ProfilesService } from './profiles.service';
 
@@ -15,7 +14,7 @@ describe('ProfilesService', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      imports: [CoreModule],
+      imports: [],
     });
 
     let serviceDatabase = TestBed.inject(DexieService);
@@ -116,5 +115,17 @@ describe('ProfilesService', () => {
     await service.remove(id + 1);
     const profiles = await service.getAll();
     expect(profiles.length).toBe(1);
+  });
+
+  it('should return that the profile exists', async () => {
+    await service.add(MOCK_PROFILE);
+    const exists = await service.exists(MOCK_PROFILE.name);
+    expect(exists).toBe(true);
+  });
+
+  it('should return that the profile does not exists', async () => {
+    await service.add(MOCK_PROFILE);
+    const exists = await service.exists(MOCK_PROFILE_2.name);
+    expect(exists).toBe(false);
   });
 });

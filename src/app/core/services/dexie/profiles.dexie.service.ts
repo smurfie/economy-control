@@ -30,4 +30,8 @@ export class ProfilesDexieService implements ProfilesService {
   remove(id: number): Promise<void> {
     return this.table.delete(id);
   }
+
+  exists(name: string): Promise<boolean> {
+    return this.table.get({ name: name }, (item) => (item ? true : false));
+  }
 }
