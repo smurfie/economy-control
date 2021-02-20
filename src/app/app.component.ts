@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ProfilesService } from './core/services/profiles.service';
-import { ProfileWithID } from './shared/models/profile.model';
+import { UsersService } from './core/services/users.service';
+import { User } from './shared/models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +8,12 @@ import { ProfileWithID } from './shared/models/profile.model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private profilesService: ProfilesService) {}
+  constructor(private usersService: UsersService) {}
   title = 'economy-control';
 
   ngOnInit() {
-    this.profilesService.getAll().then((profiles: Array<ProfileWithID>) => {
-      console.log(profiles);
+    this.usersService.getAll().then((users: Array<User>) => {
+      console.log(users);
     });
   }
 }
