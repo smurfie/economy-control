@@ -43,4 +43,20 @@ export abstract class UsersService {
    * @param username
    */
   abstract exists(username: string): Promise<boolean>;
+
+  /**
+   * Login an user by username
+   * @param username
+   */
+  abstract login(username: string): Promise<User | undefined>;
+
+  /**
+   * Logout current logged in user
+   */
+  abstract logout(): Promise<void>;
+
+  /**
+   * Return current logged in userId
+   */
+  abstract getUserIdLoggedIn(): Promise<number | undefined>;
 }

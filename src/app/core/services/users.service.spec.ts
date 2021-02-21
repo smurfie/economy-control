@@ -129,4 +129,35 @@ describe('UsersService', () => {
     const exists = await service.exists(MOCK_USER_2.username);
     expect(exists).toBe(false);
   });
+
+  it('should return no user logged in', async () => {
+    expect(await service.getUserIdLoggedIn()).toBeUndefined();
+  });
+
+  it('should return user logged in', async () => {
+    const userId = await service.add(MOCK_USER);
+    await service.login(MOCK_USER.username);
+    expect(await service.getUserIdLoggedIn()).toBe(userId);
+  });
+
+  it('should return second user logged in', async () => {
+    await service.add(MOCK_USER);
+    const userId = await service.add(MOCK_USER_2);
+    await service.login(MOCK_USER.username);
+    await service.login(MOCK_USER_2.username);
+    expect(await service.getUserIdLoggedIn()).toBe(userId);
+  });
+
+  it('should return no user logged in after logout', async () => {
+    await service.add(MOCK_USER);
+    await service.login(MOCK_USER.username);
+    await service.logout();
+    expect(await service.getUserIdLoggedIn()).toBeUndefined();
+  });
+
+  it('should not log in unexistant user', async () => {
+    const user = await service.login(MOCK_USER.username);
+    expect(user).toBeUndefined();
+    expect(await service.getUserIdLoggedIn()).toBeUndefined();
+  });
 });

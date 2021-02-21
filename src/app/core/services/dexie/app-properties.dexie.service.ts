@@ -9,14 +9,14 @@ const DEFAULT_USER_STRING = 'defaultUser';
 
 @Injectable()
 export class AppPropertiesDexieService implements AppPropertiesService {
-  table: Dexie.Table<AppProperty>;
+  private _table: Dexie.Table<AppProperty>;
 
   constructor(private dexieService: DexieService, private userService: UsersService) {
-    this.table = this.dexieService.table('appProperties');
+    this._table = this.dexieService.table('appProperties');
   }
 
   async getDefaultUser(): Promise<User | undefined> {
-    const appProperty = await this.table.get(DEFAULT_USER_STRING);
+    const appProperty = await this._table.get(DEFAULT_USER_STRING);
     return appProperty ? await this.userService.get(appProperty.value) : undefined;
   }
 
@@ -25,10 +25,10 @@ export class AppPropertiesDexieService implements AppPropertiesService {
       name: DEFAULT_USER_STRING,
       value: userId,
     };
-    await this.table.put(appProperty);
+    await this._table.put(appProperty);
   }
 
   async removeDefaultUser(): Promise<void> {
-    this.table.delete(DEFAULT_USER_STRING);
+    this._table.delete(DEFAULT_USER_STRING);
   }
 }
