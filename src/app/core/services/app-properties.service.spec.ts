@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { of } from 'rxjs';
 import { AppPropertiesService } from './app-properties.service';
 import { DexieService } from './dexie/dexie.service';
 import { UsersService } from './users.service';
