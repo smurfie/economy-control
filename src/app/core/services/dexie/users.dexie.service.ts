@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core';
 import { User, UserWithoutId } from 'src/app/shared/models/user.model';
+import { AppPropertiesService } from '../app-properties.service';
 import { UsersService } from '../users.service';
 import { DexieService } from './dexie.service';
-
-const DEFAULT_USER_STRING = 'defaultUser';
 
 @Injectable()
 export class UsersDexieService implements UsersService {
   private _table: Dexie.Table<User, number>;
   private _userIdLoggedIn: number | undefined;
 
-  constructor(private dexieService: DexieService) {
+  constructor(private dexieService: DexieService, private appPropertiesService: AppPropertiesService) {
     this._table = this.dexieService.table('users');
   }
 
@@ -38,15 +37,19 @@ export class UsersDexieService implements UsersService {
     return this._table.get({ username: username }, (item) => (item ? true : false));
   }
 
-  login(username: string): Promise<User | undefined> {
-    return this._table.get({ username: username }, (item) => {
-      this._userIdLoggedIn = item ? item.id : undefined;
-      return item;
-    });
+  async login(username: string): Promise<User | undefined> {
+    const userWithourId: UserWithoutId = { username: username };
+    const user = await this._table.get(userWithourId);
+    if (user) {
+      this._userIdLoggedIn = user.id;
+      await this.appPropertiesService.setLastUserIdLoggedIn(user.id);
+    }
+    return user;
   }
 
   async logout(): Promise<void> {
     this._userIdLoggedIn = undefined;
+    await this.appPropertiesService.removeLastUserIdLoggedIn();
   }
 
   async getUserIdLoggedIn(): Promise<number | undefined> {

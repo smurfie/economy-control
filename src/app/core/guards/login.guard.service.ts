@@ -7,21 +7,24 @@ import { UsersService } from '../services/users.service';
 @Injectable()
 export class LoginGuardService implements CanActivate {
   constructor(
-    private users: UsersService,
+    private usersService: UsersService,
     private appPropertiesService: AppPropertiesService,
     private router: Router
   ) {}
 
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
     const path = route.routeConfig?.path;
-    let loggedIn = (await this.users.getUserIdLoggedIn()) !== undefined;
+    let loggedIn = (await this.usersService.getUserIdLoggedIn()) !== undefined;
     let canActivate = true;
 
     if (!loggedIn) {
-      const defaultUser = await this.appPropertiesService.getDefaultUser();
-      if (defaultUser) {
-        await this.users.login(defaultUser.username);
-        loggedIn = true;
+      const userId = await this.appPropertiesService.getLastUserIdLoggedIn();
+      if (userId) {
+        const user = await this.usersService.get(userId);
+        if (user) {
+          await this.usersService.login(user.username);
+          loggedIn = true;
+        }
       }
     }
 

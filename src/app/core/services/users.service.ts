@@ -45,13 +45,13 @@ export abstract class UsersService {
   abstract exists(username: string): Promise<boolean>;
 
   /**
-   * Login an user by username
+   * Login an user by username and save it to the lastUserIdLoggedIn
    * @param username
    */
   abstract login(username: string): Promise<User | undefined>;
 
   /**
-   * Logout current logged in user
+   * Logout current logged in user and remove it from the lastUserIdLoggedIn
    */
   abstract logout(): Promise<void>;
 

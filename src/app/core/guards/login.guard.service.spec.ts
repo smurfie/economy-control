@@ -36,12 +36,14 @@ describe('LoginGuardService', () => {
   describe('Authenticated User', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(1));
-      spyOn(appPropertiesService, 'getDefaultUser');
+      spyOn(appPropertiesService, 'getLastUserIdLoggedIn');
+      spyOn(usersService, 'get');
     });
 
     afterEach(() => {
       expect(usersService.login).not.toHaveBeenCalled();
-      expect(appPropertiesService.getDefaultUser).not.toHaveBeenCalled();
+      expect(appPropertiesService.getLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.login).not.toHaveBeenCalled();
     });
 
     it('should return true when navigating home', async () => {
@@ -66,15 +68,16 @@ describe('LoginGuardService', () => {
     });
   });
 
-  describe('Unauthenticated User with DefaultUser', () => {
+  describe('Unauthenticated User with LastUserIdLoggedIn', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
-      spyOn(appPropertiesService, 'getDefaultUser').and.returnValue(Promise.resolve(DEFAULT_USER));
+      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(DEFAULT_USER.id));
+      spyOn(usersService, 'get').and.returnValue(Promise.resolve(DEFAULT_USER));
     });
 
     afterEach(() => {
       expect(usersService.login).toHaveBeenCalledOnceWith(DEFAULT_USER.username);
-      expect(appPropertiesService.getDefaultUser).toHaveBeenCalledTimes(1);
+      expect(appPropertiesService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
     });
 
     it('should return true when navigating home', async () => {
@@ -99,15 +102,17 @@ describe('LoginGuardService', () => {
     });
   });
 
-  describe('Unauthenticated User without DefaultUser', () => {
+  describe('Unauthenticated User without LastUserIdLoggedIn', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
-      spyOn(appPropertiesService, 'getDefaultUser').and.returnValue(Promise.resolve(undefined));
+      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
+      spyOn(usersService, 'get');
     });
 
     afterEach(() => {
       expect(usersService.login).not.toHaveBeenCalled();
-      expect(appPropertiesService.getDefaultUser).toHaveBeenCalledTimes(1);
+      expect(appPropertiesService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
+      expect(usersService.get).not.toHaveBeenCalled();
     });
 
     it('should return false when navigating home', async () => {

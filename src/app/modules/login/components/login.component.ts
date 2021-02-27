@@ -38,7 +38,7 @@ export class LoginComponent {
     };
     const userId = await this.usersService.add(user);
     await this.usersService.login(user.username);
-    await this.appPropertiesService.setDefaultUser(userId);
+    await this.appPropertiesService.setLastUserIdLoggedIn(userId);
 
     this.router.navigate([AppURLS.HOME]);
   }

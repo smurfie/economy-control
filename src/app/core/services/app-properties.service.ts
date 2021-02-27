@@ -10,18 +10,18 @@ export abstract class AppPropertiesService {
   constructor() {}
 
   /**
-   * Return the default user
+   * Return the last user id that was logged in (and not logged out). Useful to keep the user logged between sessions.
    */
-  abstract getDefaultUser(): Promise<User | undefined>;
+  abstract getLastUserIdLoggedIn(): Promise<number | undefined>;
 
   /**
-   * Sets the user with userId passed as parameter to be the default user
+   * Sets the last user id that was logged in
    * @param userId
    */
-  abstract setDefaultUser(userId: number): Promise<void>;
+  abstract setLastUserIdLoggedIn(userId: number): Promise<void>;
 
   /**
-   * Remove the default user from the app
+   * Remove (logout) last user id that was logged in
    */
-  abstract removeDefaultUser(): Promise<void>;
+  abstract removeLastUserIdLoggedIn(): Promise<void>;
 }
