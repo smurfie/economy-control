@@ -8,10 +8,10 @@ import { AppURLS } from 'src/app/shared/models/url.model';
 import { UserWithoutId } from 'src/app/shared/models/user.model';
 
 @Component({
-  selector: 'ec-login',
-  templateUrl: './login.component.html',
+  selector: 'ec-create-user',
+  templateUrl: './create-user.component.html',
 })
-export class LoginComponent {
+export class CreateUserComponent {
   createUserForm = this.formBuilder.group({
     username: [
       '',

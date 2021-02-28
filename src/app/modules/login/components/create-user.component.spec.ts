@@ -5,11 +5,11 @@ import { AppPropertiesService } from 'src/app/core/services/app-properties.servi
 import { UsersService } from 'src/app/core/services/users.service';
 import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-username.directive';
 import { AppURLS } from 'src/app/shared/models/url.model';
-import { LoginComponent } from './login.component';
+import { CreateUserComponent } from './create-user.component';
 
-describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+describe('CreateUserComponent', () => {
+  let component: CreateUserComponent;
+  let fixture: ComponentFixture<CreateUserComponent>;
   let element: HTMLInputElement;
 
   let router: any;
@@ -20,7 +20,7 @@ describe('LoginComponent', () => {
   let button: HTMLButtonElement;
 
   function initializeComponents() {
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(CreateUserComponent);
     component = fixture.componentInstance;
     element = fixture.nativeElement;
     fixture.detectChanges();
@@ -33,7 +33,7 @@ describe('LoginComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule],
-      declarations: [LoginComponent],
+      declarations: [CreateUserComponent],
       providers: [FormBuilder, { provide: Router, useValue: router }],
     }).compileComponents();
   });

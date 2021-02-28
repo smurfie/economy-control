@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LoginComponent } from '../components/login.component';
+import { CreateUserComponent } from '../components/create-user.component';
 import { LoginPage } from './login.page';
 
 describe('LoginPage', () => {
@@ -10,7 +10,7 @@ describe('LoginPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      declarations: [LoginPage, LoginStubComponent],
+      declarations: [LoginPage, CreateUserStubComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginPage);
@@ -21,10 +21,10 @@ describe('LoginPage', () => {
     expect(page).toBeTruthy();
   });
 
-  it('should contain an ec-login component', () => {
-    expect(fixture.nativeElement.querySelector('ec-login')).not.toBe(null);
+  it('should contain an ec-create-user component', () => {
+    expect(fixture.nativeElement.querySelector('ec-create-user')).not.toBe(null);
   });
 });
 
-@Component({ selector: 'ec-login', template: '' })
-class LoginStubComponent implements Partial<LoginComponent> {}
+@Component({ selector: 'ec-create-user', template: '' })
+class CreateUserStubComponent implements Partial<CreateUserComponent> {}
