@@ -7,7 +7,7 @@ import { UsersService } from './core/services/users.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  constructor(private usersService: UsersService) {}
+  constructor() {}
   title = 'economy-control';
 
   ngOnInit() {}
