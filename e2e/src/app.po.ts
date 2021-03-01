@@ -1,11 +1,15 @@
-import { browser, by, element } from 'protractor';
+import { browser, by, element, ElementFinder } from 'protractor';
 
 export class AppPage {
   async navigateTo(): Promise<unknown> {
     return browser.get(browser.baseUrl);
   }
 
-  async getTitleText(): Promise<string> {
-    return element(by.css('app-root .content span')).getText();
+  getCreateButton(): ElementFinder {
+    return element(by.css('app-root form button'));
+  }
+
+  async fillUsernameInput(username: string): Promise<void> {
+    return element(by.css('app-root form input')).sendKeys(username);
   }
 }
