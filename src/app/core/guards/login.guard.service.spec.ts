@@ -102,6 +102,40 @@ describe('LoginGuardService', () => {
     });
   });
 
+  describe('Unauthenticated User with LastUserIdLoggedIn that do not exist', () => {
+    beforeEach(() => {
+      spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
+      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(DEFAULT_USER.id));
+      spyOn(usersService, 'get').and.returnValue(Promise.resolve(undefined));
+    });
+
+    afterEach(() => {
+      expect(usersService.login).not.toHaveBeenCalled();
+      expect(appPropertiesService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return false when navigating home', async () => {
+      expect(await guard.canActivate(HOME_ROUTE as ActivatedRouteSnapshot)).toEqual(false);
+    });
+
+    it('should return true when navigating login', async () => {
+      expect(await guard.canActivate(LOGIN_ROUTE as ActivatedRouteSnapshot)).toEqual(true);
+      expect(usersService.getUserIdLoggedIn).toHaveBeenCalledTimes(1);
+    });
+
+    it('should redirect to login when navigating home', async () => {
+      await guard.canActivate(HOME_ROUTE as ActivatedRouteSnapshot);
+
+      expect(router.navigate).toHaveBeenCalledWith([AppURLS.LOGIN]);
+    });
+
+    it('should not redirect when navigating login', async () => {
+      await guard.canActivate(LOGIN_ROUTE as ActivatedRouteSnapshot);
+
+      expect(router.navigate).not.toHaveBeenCalled();
+    });
+  });
+
   describe('Unauthenticated User without LastUserIdLoggedIn', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));

@@ -7,8 +7,6 @@ import { UsersDexieService } from './dexie/users.dexie.service';
   useClass: UsersDexieService,
 })
 export abstract class UsersService {
-  constructor() {}
-
   /**
    * Get all users
    */

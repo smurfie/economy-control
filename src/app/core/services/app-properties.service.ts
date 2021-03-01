@@ -7,8 +7,6 @@ import { AppPropertiesDexieService } from './dexie/app-properties.dexie.service'
   useClass: AppPropertiesDexieService,
 })
 export abstract class AppPropertiesService {
-  constructor() {}
-
   /**
    * Return the last user id that was logged in (and not logged out). Useful to keep the user logged between sessions.
    */
