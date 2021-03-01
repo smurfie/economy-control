@@ -10,7 +10,7 @@ import { CreateUserComponent } from './create-user.component';
 describe('CreateUserComponent', () => {
   let component: CreateUserComponent;
   let fixture: ComponentFixture<CreateUserComponent>;
-  let element: HTMLInputElement;
+  let element: HTMLElement;
 
   let router: any;
   let uniqueUsernameValidator: any;

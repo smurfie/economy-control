@@ -22,10 +22,4 @@ export class UniqueUsernameValidator implements AsyncValidator {
     },
   ],
 })
-export class UniqueUsernameValidatorDirective {
-  constructor(private validator: UniqueUsernameValidator) {}
-
-  validate(control: AbstractControl) {
-    this.validator.validate(control);
-  }
-}
+export class UniqueUsernameValidatorDirective {}
