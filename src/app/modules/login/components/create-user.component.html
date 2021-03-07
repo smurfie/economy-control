@@ -1,6 +1,12 @@
 <form [formGroup]="createUserForm" (ngSubmit)="createAndLogin()">
-  <input formControlName="username" autocomplete="off" placeholder="Username" required />
-  <button type="submit" [disabled]="!createUserForm.valid">Create</button>
+  <div class="row mb-3">
+    <div class="col">
+      <input type="text" formControlName="username" class="form-control" placeholder="Username" required />
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary" type="submit" [disabled]="!createUserForm.valid">Create</button>
+    </div>
+  </div>
 
   <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="alert alert-danger">
     <div *ngIf="username?.errors?.required" data-testid="required">Username is required.</div>

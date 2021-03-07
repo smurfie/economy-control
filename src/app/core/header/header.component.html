@@ -1,1 +1,8 @@
-<button (click)="logout()">Logout</button>
+<ul class="nav bg-primary bg-gradient">
+  <li class="nav-item">
+    <a class="nav-link text-light" [routerLink]="home" data-testid="home"><i class="bi-house"></i></a>
+  </li>
+  <li class="nav-item ms-auto">
+    <a class="nav-link text-light" [routerLink]="" (click)="logout()" data-testid="logout"><i class="bi-power"></i></a>
+  </li>
+</ul>
