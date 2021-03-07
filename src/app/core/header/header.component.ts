@@ -8,6 +8,8 @@ import { UsersService } from '../services/users.service';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
+  home = AppURLS.HOME;
+
   constructor(private usersService: UsersService, private router: Router) {}
 
   async logout(): Promise<void> {
