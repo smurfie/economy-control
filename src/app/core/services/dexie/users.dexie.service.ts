@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { User, UserWithoutId } from 'src/app/shared/models/user.model';
-import { AppPropertiesService } from '../app-properties.service';
 import { UsersService } from '../users.service';
 import { DexieService } from './dexie.service';
+
+const LAST_USER_ID_LOGGED_IN_STRING = 'lastUserIdLoggedIn';
 
 @Injectable()
 export class UsersDexieService implements UsersService {
   private _table: Dexie.Table<User, number>;
   private _userIdLoggedIn: number | undefined;
 
-  constructor(private dexieService: DexieService, private appPropertiesService: AppPropertiesService) {
+  constructor(private dexieService: DexieService) {
     this._table = this.dexieService.table('users');
   }
 
@@ -42,17 +43,31 @@ export class UsersDexieService implements UsersService {
     const user = await this._table.get(userWithourId);
     if (user) {
       this._userIdLoggedIn = user.id;
-      await this.appPropertiesService.setLastUserIdLoggedIn(user.id);
+      this.setLastUserIdLoggedIn(user.id);
     }
     return user;
   }
 
-  async logout(): Promise<void> {
+  logout(): void {
     this._userIdLoggedIn = undefined;
-    await this.appPropertiesService.removeLastUserIdLoggedIn();
+    this.removeLastUserIdLoggedIn();
   }
 
   async getUserIdLoggedIn(): Promise<number | undefined> {
     return this._userIdLoggedIn;
+  }
+
+  getLastUserIdLoggedIn(): number | undefined {
+    const lastUserIdLoggedInString = localStorage.getItem(LAST_USER_ID_LOGGED_IN_STRING);
+    const lastUserIdLoggedIn = Number(lastUserIdLoggedInString);
+    return Number.isInteger(lastUserIdLoggedIn) && lastUserIdLoggedIn > 0 ? lastUserIdLoggedIn : undefined;
+  }
+
+  setLastUserIdLoggedIn(userId: number): void {
+    localStorage.setItem(LAST_USER_ID_LOGGED_IN_STRING, String(userId));
+  }
+
+  removeLastUserIdLoggedIn(): void {
+    localStorage.removeItem(LAST_USER_ID_LOGGED_IN_STRING);
   }
 }

@@ -51,10 +51,26 @@ export abstract class UsersService {
   /**
    * Logout current logged in user and remove it from the lastUserIdLoggedIn
    */
-  abstract logout(): Promise<void>;
+  abstract logout(): void;
 
   /**
    * Return current logged in userId
    */
   abstract getUserIdLoggedIn(): Promise<number | undefined>;
+
+  /**
+   * Return the last user id that was logged in (and not logged out). Useful to keep the user logged between sessions.
+   */
+  abstract getLastUserIdLoggedIn(): number | undefined;
+
+  /**
+   * Sets the last user id that was logged in
+   * @param userId
+   */
+  abstract setLastUserIdLoggedIn(userId: number): void;
+
+  /**
+   * Remove (logout) last user id that was logged in
+   */
+  abstract removeLastUserIdLoggedIn(): void;
 }

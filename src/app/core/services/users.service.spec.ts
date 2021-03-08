@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { User, UserWithoutId } from 'src/app/shared/models/user.model';
-import { AppPropertiesService } from './app-properties.service';
 import { DexieService } from './dexie/dexie.service';
 import { UsersService } from './users.service';
 
@@ -11,9 +10,10 @@ describe('UsersService', () => {
   const MOCK_USER_2: UserWithoutId = {
     username: 'User2',
   };
+  const USER_ID = 1;
+  const USER_ID_2 = 2;
 
   let usersService: UsersService;
-  let appPropertiesService: AppPropertiesService;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -22,9 +22,8 @@ describe('UsersService', () => {
 
     let serviceDatabase = TestBed.inject(DexieService);
     await serviceDatabase.table('users').clear();
-    await serviceDatabase.table('appProperties').clear();
+    window.localStorage.clear();
     usersService = TestBed.inject(UsersService);
-    appPropertiesService = TestBed.inject(AppPropertiesService);
   });
 
   it('should be created', () => {
@@ -140,13 +139,13 @@ describe('UsersService', () => {
 
   describe('Login', () => {
     beforeEach(() => {
-      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
-      spyOn(appPropertiesService, 'setLastUserIdLoggedIn');
-      spyOn(appPropertiesService, 'removeLastUserIdLoggedIn');
+      spyOn(usersService, 'getLastUserIdLoggedIn').and.returnValue(undefined);
+      spyOn(usersService, 'setLastUserIdLoggedIn');
+      spyOn(usersService, 'removeLastUserIdLoggedIn');
     });
 
     afterEach(() => {
-      expect(appPropertiesService.getLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.getLastUserIdLoggedIn).not.toHaveBeenCalled();
     });
 
     it('should return user logged in', async () => {
@@ -154,8 +153,8 @@ describe('UsersService', () => {
       await usersService.login(MOCK_USER.username);
 
       expect(await usersService.getUserIdLoggedIn()).toBe(userId);
-      expect(appPropertiesService.setLastUserIdLoggedIn).toHaveBeenCalledWith(userId);
-      expect(appPropertiesService.removeLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.setLastUserIdLoggedIn).toHaveBeenCalledWith(userId);
+      expect(usersService.removeLastUserIdLoggedIn).not.toHaveBeenCalled();
     });
 
     it('should return second user logged in', async () => {
@@ -164,26 +163,58 @@ describe('UsersService', () => {
       await usersService.login(MOCK_USER.username);
       await usersService.login(MOCK_USER_2.username);
       expect(await usersService.getUserIdLoggedIn()).toBe(userId2);
-      expect(appPropertiesService.setLastUserIdLoggedIn).toHaveBeenCalledWith(userId);
-      expect(appPropertiesService.setLastUserIdLoggedIn).toHaveBeenCalledWith(userId2);
-      expect(appPropertiesService.removeLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.setLastUserIdLoggedIn).toHaveBeenCalledWith(userId);
+      expect(usersService.setLastUserIdLoggedIn).toHaveBeenCalledWith(userId2);
+      expect(usersService.removeLastUserIdLoggedIn).not.toHaveBeenCalled();
     });
 
     it('should return no user logged in after logout', async () => {
       await usersService.add(MOCK_USER);
       await usersService.login(MOCK_USER.username);
-      await usersService.logout();
+      usersService.logout();
       expect(await usersService.getUserIdLoggedIn()).toBeUndefined();
-      expect(appPropertiesService.setLastUserIdLoggedIn).toHaveBeenCalled();
-      expect(appPropertiesService.removeLastUserIdLoggedIn).toHaveBeenCalled();
+      expect(usersService.setLastUserIdLoggedIn).toHaveBeenCalled();
+      expect(usersService.removeLastUserIdLoggedIn).toHaveBeenCalled();
     });
 
     it('should not log in unexistant user', async () => {
       const user = await usersService.login(MOCK_USER.username);
       expect(user).toBeUndefined();
       expect(await usersService.getUserIdLoggedIn()).toBeUndefined();
-      expect(appPropertiesService.setLastUserIdLoggedIn).not.toHaveBeenCalled();
-      expect(appPropertiesService.removeLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.setLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.removeLastUserIdLoggedIn).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('LastUserLoggedIn', () => {
+    it('should return undefined when last userId logged in does not exist', () => {
+      expect(usersService.getLastUserIdLoggedIn()).toBeUndefined();
+    });
+
+    it('should return the last userId logged in', () => {
+      usersService.setLastUserIdLoggedIn(USER_ID);
+      const userId = usersService.getLastUserIdLoggedIn();
+
+      expect(userId).toBe(USER_ID);
+    });
+
+    it('should return the last last userId logged in', () => {
+      usersService.setLastUserIdLoggedIn(USER_ID);
+      usersService.setLastUserIdLoggedIn(USER_ID_2);
+      const userId = usersService.getLastUserIdLoggedIn();
+
+      expect(userId).toBe(USER_ID_2);
+    });
+
+    it('should return undefined when last userId logged in was removed', () => {
+      usersService.setLastUserIdLoggedIn(USER_ID);
+      usersService.removeLastUserIdLoggedIn();
+      expect(usersService.getLastUserIdLoggedIn()).toBeUndefined();
+    });
+
+    it('should let remove last userId logged in if it does not exist', () => {
+      usersService.removeLastUserIdLoggedIn();
+      expect(usersService.getLastUserIdLoggedIn()).toBeUndefined();
     });
   });
 });

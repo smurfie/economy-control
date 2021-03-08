@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { AppURLS } from 'src/app/shared/models/url.model';
-import { AppPropertiesService } from '../services/app-properties.service';
 import { UsersService } from '../services/users.service';
 
 @Injectable()
 export class LoginGuardService implements CanActivate {
-  constructor(
-    private usersService: UsersService,
-    private appPropertiesService: AppPropertiesService,
-    private router: Router
-  ) {}
+  constructor(private usersService: UsersService, private router: Router) {}
 
   async canActivate(route: ActivatedRouteSnapshot): Promise<boolean> {
     const path = route.routeConfig?.path;
@@ -18,7 +13,7 @@ export class LoginGuardService implements CanActivate {
     let canActivate = true;
 
     if (!loggedIn) {
-      const userId = await this.appPropertiesService.getLastUserIdLoggedIn();
+      const userId = await this.usersService.getLastUserIdLoggedIn();
       if (userId) {
         const user = await this.usersService.get(userId);
         if (user) {

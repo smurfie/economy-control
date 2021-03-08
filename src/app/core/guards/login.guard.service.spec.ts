@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { AppURLS } from 'src/app/shared/models/url.model';
 import { User } from 'src/app/shared/models/user.model';
-import { AppPropertiesService } from '../services/app-properties.service';
+import { UserPropertiesService } from '../services/user-properties.service';
 import { UsersService } from '../services/users.service';
 import { LoginGuardService } from './login.guard.service';
 
@@ -12,7 +12,6 @@ describe('LoginGuardService', () => {
   const DEFAULT_USER: User = { id: 1, username: 'John' };
 
   let usersService: UsersService;
-  let appPropertiesService: AppPropertiesService;
   let guard: LoginGuardService;
   let router: any;
 
@@ -23,7 +22,6 @@ describe('LoginGuardService', () => {
       providers: [LoginGuardService, { provide: Router, useValue: router }],
     });
     usersService = TestBed.inject(UsersService);
-    appPropertiesService = TestBed.inject(AppPropertiesService);
     guard = TestBed.inject(LoginGuardService);
 
     spyOn(usersService, 'login');
@@ -36,13 +34,13 @@ describe('LoginGuardService', () => {
   describe('Authenticated User', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(1));
-      spyOn(appPropertiesService, 'getLastUserIdLoggedIn');
+      spyOn(usersService, 'getLastUserIdLoggedIn');
       spyOn(usersService, 'get');
     });
 
     afterEach(() => {
       expect(usersService.login).not.toHaveBeenCalled();
-      expect(appPropertiesService.getLastUserIdLoggedIn).not.toHaveBeenCalled();
+      expect(usersService.getLastUserIdLoggedIn).not.toHaveBeenCalled();
       expect(usersService.login).not.toHaveBeenCalled();
     });
 
@@ -71,13 +69,13 @@ describe('LoginGuardService', () => {
   describe('Unauthenticated User with LastUserIdLoggedIn', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
-      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(DEFAULT_USER.id));
+      spyOn(usersService, 'getLastUserIdLoggedIn').and.returnValue(DEFAULT_USER.id);
       spyOn(usersService, 'get').and.returnValue(Promise.resolve(DEFAULT_USER));
     });
 
     afterEach(() => {
       expect(usersService.login).toHaveBeenCalledOnceWith(DEFAULT_USER.username);
-      expect(appPropertiesService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
+      expect(usersService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
     });
 
     it('should return true when navigating home', async () => {
@@ -105,13 +103,13 @@ describe('LoginGuardService', () => {
   describe('Unauthenticated User with LastUserIdLoggedIn that do not exist', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
-      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(DEFAULT_USER.id));
+      spyOn(usersService, 'getLastUserIdLoggedIn').and.returnValue(DEFAULT_USER.id);
       spyOn(usersService, 'get').and.returnValue(Promise.resolve(undefined));
     });
 
     afterEach(() => {
       expect(usersService.login).not.toHaveBeenCalled();
-      expect(appPropertiesService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
+      expect(usersService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
     });
 
     it('should return false when navigating home', async () => {
@@ -139,13 +137,13 @@ describe('LoginGuardService', () => {
   describe('Unauthenticated User without LastUserIdLoggedIn', () => {
     beforeEach(() => {
       spyOn(usersService, 'getUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
-      spyOn(appPropertiesService, 'getLastUserIdLoggedIn').and.returnValue(Promise.resolve(undefined));
+      spyOn(usersService, 'getLastUserIdLoggedIn').and.returnValue(undefined);
       spyOn(usersService, 'get');
     });
 
     afterEach(() => {
       expect(usersService.login).not.toHaveBeenCalled();
-      expect(appPropertiesService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
+      expect(usersService.getLastUserIdLoggedIn).toHaveBeenCalledTimes(1);
       expect(usersService.get).not.toHaveBeenCalled();
     });
 

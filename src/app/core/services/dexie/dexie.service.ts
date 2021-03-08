@@ -9,7 +9,7 @@ export class DexieService extends Dexie {
     super('EconomyControlDatabase');
     this.version(1).stores({
       users: '++id, &username',
-      appProperties: 'name, value',
+      userProperties: 'userId, name, value',
     });
   }
 }
