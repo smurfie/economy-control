@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppPropertiesService } from 'src/app/core/services/app-properties.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-username.directive';
 import { AppURLS } from 'src/app/shared/models/url.model';
@@ -28,7 +27,6 @@ export class CreateUserComponent {
     private formBuilder: FormBuilder,
     private uniqueUsernameValidator: UniqueUsernameValidator,
     private usersService: UsersService,
-    private appPropertiesService: AppPropertiesService,
     private router: Router
   ) {}
 
@@ -38,7 +36,7 @@ export class CreateUserComponent {
     };
     const userId = await this.usersService.add(user);
     await this.usersService.login(user.username);
-    await this.appPropertiesService.setLastUserIdLoggedIn(userId);
+    this.usersService.setLastUserIdLoggedIn(userId);
 
     this.router.navigate([AppURLS.HOME]);
   }

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppPropertiesService } from 'src/app/core/services/app-properties.service';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-username.directive';
 import { AppURLS } from 'src/app/shared/models/url.model';
@@ -15,7 +14,6 @@ describe('CreateUserComponent', () => {
   let router: any;
   let uniqueUsernameValidator: any;
   let usersService: UsersService;
-  let appPropertiesService: AppPropertiesService;
   let input: HTMLInputElement;
   let button: HTMLButtonElement;
 
@@ -138,7 +136,6 @@ describe('CreateUserComponent', () => {
         providers: [{ provide: UniqueUsernameValidator, useValue: uniqueUsernameValidator }],
       });
       usersService = TestBed.inject(UsersService);
-      appPropertiesService = TestBed.inject(AppPropertiesService);
 
       initializeComponents();
     });
@@ -161,7 +158,7 @@ describe('CreateUserComponent', () => {
     it('should login and redirect to the home', async () => {
       spyOn(usersService, 'add');
       spyOn(usersService, 'login');
-      spyOn(appPropertiesService, 'setLastUserIdLoggedIn');
+      spyOn(usersService, 'setLastUserIdLoggedIn');
       const username = 'Test1';
 
       input.value = username;
