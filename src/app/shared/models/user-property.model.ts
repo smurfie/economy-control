@@ -1,5 +1,5 @@
 export interface UserProperty {
   userId: number;
-  name: string;
-  value: any;
+  propertyName: string;
+  propertyValue: any;
 }
