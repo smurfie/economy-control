@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User, UserWithoutId } from 'src/app/shared/models/user.model';
+import { UserPropertiesService } from '../user-properties.service';
 import { UsersService } from '../users.service';
 import { DexieService } from './dexie.service';
 
@@ -10,7 +11,7 @@ export class UsersDexieService implements UsersService {
   private _table: Dexie.Table<User, number>;
   private _userIdLoggedIn: number | undefined;
 
-  constructor(private dexieService: DexieService) {
+  constructor(private dexieService: DexieService, private userPropertiesService: UserPropertiesService) {
     this._table = this.dexieService.table('users');
   }
 
@@ -30,8 +31,9 @@ export class UsersDexieService implements UsersService {
     return this._table.update(user.id, user);
   }
 
-  remove(id: number): Promise<void> {
-    return this._table.delete(id);
+  async remove(id: number): Promise<void> {
+    await this.userPropertiesService.removeCurrency(id);
+    await this._table.delete(id);
   }
 
   exists(username: string): Promise<boolean> {
