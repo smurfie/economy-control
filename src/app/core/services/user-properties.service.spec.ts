@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { UserPropertiesService } from './user-properties.service';
 import { DexieService } from './dexie/dexie.service';
+import { UserPropertiesService } from './user-properties.service';
 
 describe('UserPropertiesService', () => {
   const USER_ID = 1;

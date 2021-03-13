@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { User, UserWithoutId } from 'src/app/shared/models/user.model';
 import { DexieService } from './dexie/dexie.service';
+import { UserPropertiesService } from './user-properties.service';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
@@ -14,6 +15,7 @@ describe('UsersService', () => {
   const USER_ID_2 = 2;
 
   let usersService: UsersService;
+  let userPropertiesService: UserPropertiesService;
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
@@ -24,6 +26,7 @@ describe('UsersService', () => {
     await serviceDatabase.table('users').clear();
     window.localStorage.clear();
     usersService = TestBed.inject(UsersService);
+    userPropertiesService = TestBed.inject(UserPropertiesService);
   });
 
   it('should be created', () => {
@@ -112,6 +115,15 @@ describe('UsersService', () => {
     await usersService.remove(id);
     const users = await usersService.getAll();
     expect(users.length).toBe(0);
+  });
+
+  it('should call remove on all its properties', async () => {
+    spyOn(userPropertiesService, 'removeCurrency');
+
+    const id = await usersService.add(MOCK_USER);
+    await usersService.remove(id);
+
+    expect(userPropertiesService.removeCurrency).toHaveBeenCalledWith(id);
   });
 
   it('should not delete any element if id does not exists', async () => {
