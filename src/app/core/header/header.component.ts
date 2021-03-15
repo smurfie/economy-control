@@ -9,6 +9,7 @@ import { UsersService } from '../services/users.service';
 })
 export class HeaderComponent {
   home = AppURLS.HOME;
+  settings = AppURLS.SETTINGS;
 
   constructor(private usersService: UsersService, private router: Router) {}
 

@@ -3,6 +3,25 @@
     <a class="nav-link text-light" [routerLink]="home" data-testid="home"><i class="bi-house"></i></a>
   </li>
   <li class="nav-item ms-auto">
-    <a class="nav-link text-light" [routerLink]="" (click)="logout()" data-testid="logout"><i class="bi-power"></i></a>
+    <a
+      class="nav-link dropdown-toggle text-light"
+      data-bs-toggle="dropdown"
+      [routerLink]=""
+      role="button"
+      aria-expanded="false"
+    >
+      <i class="bi-person"></i>
+    </a>
+
+    <ul class="dropdown-menu">
+      <li>
+        <a class="dropdown-item" [routerLink]="settings"><i class="bi-gear me-2"></i>Settings</a>
+      </li>
+      <li>
+        <a class="dropdown-item" [routerLink]="" (click)="logout()" data-testid="logout">
+          <i class="bi-power me-2"></i>Logout
+        </a>
+      </li>
+    </ul>
   </li>
 </ul>
