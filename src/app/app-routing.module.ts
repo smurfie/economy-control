@@ -14,6 +14,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules/home/home.module').then((m) => m.HomeModule),
     canActivate: [LoginGuardService],
   },
+  {
+    path: AppURLS.SETTINGS,
+    loadChildren: () => import('./modules/settings/settings.module').then((m) => m.SettingsModule),
+    canActivate: [LoginGuardService],
+  },
   { path: '', redirectTo: AppURLS.HOME, pathMatch: 'full' },
 ];
 
