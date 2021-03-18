@@ -8,9 +8,9 @@ import { UsersDexieService } from './dexie/users.dexie.service';
 })
 export abstract class UsersService {
   /**
-   * Get all users
+   * Get all users that have been logged in in this computer
    */
-  abstract getAll(): Promise<Array<User>>;
+  abstract getAllLocalUsers(): Promise<Array<User>>;
 
   /**
    * Get the user with id passed as parameter or undefined if it doesn't exists

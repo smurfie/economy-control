@@ -10,8 +10,8 @@ export class LoginPage {
   users: User[] = [];
 
   constructor(private usersService: UsersService) {
-    this.usersService.getAll().then((allUsers) => {
-      this.users = allUsers;
+    this.usersService.getAllLocalUsers().then((allLocalUsers) => {
+      this.users = allLocalUsers;
     });
   }
 }

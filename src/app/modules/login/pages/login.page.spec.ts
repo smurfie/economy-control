@@ -40,12 +40,12 @@ describe('LoginPage', () => {
 
   describe('Depending services tests', () => {
     it('should contain no ec-login-user components', () => {
-      spyOn(usersService, 'getAll').and.returnValue(Promise.resolve([]));
+      spyOn(usersService, 'getAllLocalUsers').and.returnValue(Promise.resolve([]));
       fixture = TestBed.createComponent(LoginPage);
       page = fixture.componentInstance;
 
       expect(fixture.nativeElement.querySelector('ec-login-user')).toBeNull();
-      expect(usersService.getAll).toHaveBeenCalled();
+      expect(usersService.getAllLocalUsers).toHaveBeenCalled();
     });
 
     it('should contain ec-login-user components as users', async () => {
@@ -54,14 +54,14 @@ describe('LoginPage', () => {
         { id: 2, username: 'User2' },
         { id: 3, username: 'User3' },
       ];
-      spyOn(usersService, 'getAll').and.returnValue(Promise.resolve(users));
+      spyOn(usersService, 'getAllLocalUsers').and.returnValue(Promise.resolve(users));
       fixture = TestBed.createComponent(LoginPage);
       page = fixture.componentInstance;
       await fixture.whenStable();
       fixture.detectChanges();
 
       expect((fixture.nativeElement.querySelectorAll('ec-login-user') as any[]).length).toBe(3);
-      expect(usersService.getAll).toHaveBeenCalled();
+      expect(usersService.getAllLocalUsers).toHaveBeenCalled();
     });
   });
 });

@@ -34,7 +34,7 @@ describe('UsersService', () => {
   });
 
   it('should get empty list', async () => {
-    const users = await usersService.getAll();
+    const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(0);
   });
 
@@ -51,7 +51,7 @@ describe('UsersService', () => {
 
   it('should add one element', async () => {
     await usersService.add(MOCK_USER);
-    const users = await usersService.getAll();
+    const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(1);
   });
 
@@ -64,7 +64,7 @@ describe('UsersService', () => {
       error = e;
     }
     expect(error).not.toBe(undefined);
-    const users = await usersService.getAll();
+    const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(1);
   });
 
@@ -113,7 +113,7 @@ describe('UsersService', () => {
   it('should delete one element', async () => {
     const id = await usersService.add(MOCK_USER);
     await usersService.remove(id);
-    const users = await usersService.getAll();
+    const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(0);
   });
 
@@ -129,7 +129,7 @@ describe('UsersService', () => {
   it('should not delete any element if id does not exists', async () => {
     const id = await usersService.add(MOCK_USER);
     await usersService.remove(id + 1);
-    const users = await usersService.getAll();
+    const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(1);
   });
 

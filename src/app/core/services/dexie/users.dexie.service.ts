@@ -15,7 +15,8 @@ export class UsersDexieService implements UsersService {
     this._table = this.dexieService.table('users');
   }
 
-  getAll(): Promise<Array<User>> {
+  getAllLocalUsers(): Promise<Array<User>> {
+    // If the db is remote this has to be retrieved from the localStorage
     return this._table.toArray();
   }
 
