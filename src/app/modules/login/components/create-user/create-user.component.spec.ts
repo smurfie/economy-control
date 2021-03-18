@@ -81,6 +81,19 @@ describe('CreateUserComponent', () => {
       expect(button.disabled).toBeTruthy();
     });
 
+    it('should show error username too long', () => {
+      input.value = 'twenty1characterslong';
+      input.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      const errors = element.querySelector('.alert') as HTMLDivElement | null;
+      const tooLong = element.querySelector('[data-testid="too-long"]') as HTMLDivElement | null;
+
+      expect(errors).not.toBe(null);
+      expect(tooLong).not.toBe(null);
+      expect(button.disabled).toBeTruthy();
+    });
+
     it('should show error required', () => {
       input.value = 'test';
       input.dispatchEvent(new Event('input'));
@@ -140,19 +153,19 @@ describe('CreateUserComponent', () => {
       initializeComponents();
     });
 
-    it('should show no errors', async () => {
-      const username = 'Test1';
+    ['5char', 'twenty_characteslong'].forEach((test) => {
+      it(`should show no errors for string: ${test}`, async () => {
+        input.value = test;
+        input.dispatchEvent(new Event('input'));
+        await fixture.whenStable();
+        fixture.detectChanges();
 
-      input.value = username;
-      input.dispatchEvent(new Event('input'));
-      await fixture.whenStable();
-      fixture.detectChanges();
+        const errors = element.querySelector('.alert') as HTMLDivElement | null;
 
-      const errors = element.querySelector('.alert') as HTMLDivElement | null;
-
-      expect(errors).toBe(null);
-      expect(uniqueUsernameValidator.validate).toHaveBeenCalledTimes(1);
-      expect(button.disabled).toBeFalsy();
+        expect(errors).toBe(null);
+        expect(uniqueUsernameValidator.validate).toHaveBeenCalledTimes(1);
+        expect(button.disabled).toBeFalsy();
+      });
     });
 
     it('should login and redirect to the home', async () => {
