@@ -6,7 +6,7 @@ import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-userna
 import { AppURLS } from 'src/app/shared/models/url.model';
 import { LoginUserComponent } from './login-user.component';
 
-xdescribe('LoginUserComponent', () => {
+describe('LoginUserComponent', () => {
   let component: LoginUserComponent;
   let fixture: ComponentFixture<LoginUserComponent>;
   let element: HTMLElement;

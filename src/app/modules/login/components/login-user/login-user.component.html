@@ -1,1 +1,6 @@
-Login User {{ user.username }}
+<div class="card">
+  <div class="card-body">
+    {{ user.username }}
+    <a [routerLink]="" (click)="login()" class="stretched-link"></a>
+  </div>
+</div>
