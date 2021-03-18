@@ -3,3 +3,11 @@
     <ec-create-user> </ec-create-user>
   </div>
 </div>
+<div class="row mt-4">
+  <h5 class="col">Login with one existing user:</h5>
+</div>
+<div class="row mt-2">
+  <div *ngFor="let user of users" class="col">
+    <ec-login-user [user]="user"> </ec-login-user>
+  </div>
+</div>
