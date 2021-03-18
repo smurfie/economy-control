@@ -11,6 +11,18 @@ describe('UsersService', () => {
   const MOCK_USER_2: UserWithoutId = {
     username: 'User2',
   };
+  const MOCK_USER_MIN_LENGTH: UserWithoutId = {
+    username: 'User1',
+  };
+  const MOCK_USER_MAX_LENGTH: UserWithoutId = {
+    username: 'User1234567890123456',
+  };
+  const MOCK_USER_ERROR_MIN_LENGTH: UserWithoutId = {
+    username: 'User',
+  };
+  const MOCK_USER_ERROR_MAX_LENGTH: UserWithoutId = {
+    username: 'User12345678901234567',
+  };
   const USER_ID = 1;
   const USER_ID_2 = 2;
 
@@ -66,6 +78,42 @@ describe('UsersService', () => {
     expect(error).not.toBe(undefined);
     const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(1);
+  });
+
+  it('should add an username with exact 5 chars', async () => {
+    await usersService.add(MOCK_USER_MIN_LENGTH);
+    const users = await usersService.getAllLocalUsers();
+    expect(users.length).toBe(1);
+  });
+
+  it('should not add an username with less than 5 chars', async () => {
+    let error;
+    try {
+      await usersService.add(MOCK_USER_ERROR_MIN_LENGTH);
+    } catch (e) {
+      error = e;
+    }
+    expect(error).not.toBe(undefined);
+    const users = await usersService.getAllLocalUsers();
+    expect(users.length).toBe(0);
+  });
+
+  it('should add an username with exact 20 chars', async () => {
+    await usersService.add(MOCK_USER_MAX_LENGTH);
+    const users = await usersService.getAllLocalUsers();
+    expect(users.length).toBe(1);
+  });
+
+  it('should not add an username with more than 20 chars', async () => {
+    let error;
+    try {
+      await usersService.add(MOCK_USER_ERROR_MAX_LENGTH);
+    } catch (e) {
+      error = e;
+    }
+    expect(error).not.toBe(undefined);
+    const users = await usersService.getAllLocalUsers();
+    expect(users.length).toBe(0);
   });
 
   it('should update the element', async () => {

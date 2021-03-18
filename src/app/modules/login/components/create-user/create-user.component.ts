@@ -14,7 +14,7 @@ export class CreateUserComponent {
   createUserForm = this.formBuilder.group({
     username: [
       '',
-      [Validators.required, Validators.minLength(5)],
+      [Validators.required, Validators.minLength(5), Validators.maxLength(20)],
       this.uniqueUsernameValidator.validate.bind(this.uniqueUsernameValidator),
     ],
   });
