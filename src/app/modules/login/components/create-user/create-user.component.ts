@@ -4,13 +4,16 @@ import { Router } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-username.directive';
 import { AppURLS } from 'src/app/shared/models/url.model';
-import { UserWithoutId } from 'src/app/shared/models/user.model';
+import { UserConstants, UserWithoutId } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'ec-create-user',
   templateUrl: './create-user.component.html',
 })
 export class CreateUserComponent {
+  readonly USERNAME_MIN_LENGTH = UserConstants.USERNAME_MIN_LENGTH;
+  readonly USERNAME_MAX_LENGTH = UserConstants.USERNAME_MAX_LENGTH;
+
   createUserForm = this.formBuilder.group({
     username: [
       '',

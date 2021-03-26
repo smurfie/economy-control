@@ -1,0 +1,21 @@
+<form [formGroup]="settingsForm" (ngSubmit)="save()">
+  <div class="row mb-3">
+    <label for="currency" class="col-sm-2 col-form-label">Currency</label>
+    <div class="col">
+      <input type="text" formControlName="currency" class="form-control" required />
+    </div>
+  </div>
+
+  <div class="row">
+    <div *ngIf="currency?.invalid && (currency?.dirty || currency?.touched)" class="alert alert-danger">
+      <div *ngIf="currency?.errors?.required" data-testid="required">Currency is required.</div>
+      <div *ngIf="currency?.errors?.maxlength" data-testid="too-long">
+        Currency must be at most {{ CURRENCY_MAX_LENGTH }} characters long.
+      </div>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <button class="btn btn-primary" type="submit" [disabled]="!settingsForm.valid">Save</button>
+  </div>
+</form>

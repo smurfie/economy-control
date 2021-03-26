@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { User, UserWithoutId } from 'src/app/shared/models/user.model';
+import { User, UserConstants, UserWithoutId } from 'src/app/shared/models/user.model';
 import { UserPropertiesService } from '../user-properties.service';
 import { UsersService } from '../users.service';
 import { DexieService } from './dexie.service';
 
-const USERNAME_MIN_LENGTH = 5;
-const USERNAME_MAX_LENGTH = 20;
 const LAST_USER_ID_LOGGED_IN_STRING = 'lastUserIdLoggedIn';
 
 @Injectable()
@@ -27,11 +25,11 @@ export class UsersDexieService implements UsersService {
   }
 
   add(user: UserWithoutId): Promise<number> {
-    if (user.username.length < USERNAME_MIN_LENGTH) {
-      throw new Error(`Username must be at least ${USERNAME_MIN_LENGTH} characters long`);
+    if (user.username.length < UserConstants.USERNAME_MIN_LENGTH) {
+      throw new Error(`Username must be at least ${UserConstants.USERNAME_MIN_LENGTH} characters long`);
     }
-    if (user.username.length > USERNAME_MAX_LENGTH) {
-      throw new Error(`Username must be at most ${USERNAME_MAX_LENGTH} characters long`);
+    if (user.username.length > UserConstants.USERNAME_MAX_LENGTH) {
+      throw new Error(`Username must be at most ${UserConstants.USERNAME_MAX_LENGTH} characters long`);
     }
     return this._table.add(user as User);
   }

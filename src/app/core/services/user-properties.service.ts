@@ -7,14 +7,15 @@ import { UserPropertiesDexieService } from './dexie/user-properties.dexie.servic
 })
 export abstract class UserPropertiesService {
   /**
-   * Get currency in ISO_4217 for userId
+   * Get currency string or default for userId
    */
-  abstract getCurrency(userId: number): Promise<string | undefined>;
+  abstract getCurrency(userId: number): Promise<string>;
 
   /**
-   * Set currency in ISO_4217 for userId
+   * Set currency string for userId. Currency length must be less than
+   * ${UserPropertyConstants.CURRENCY_MAX_LENGTH}
    */
-  abstract setCurrency(userId: number, currencyISOCode: string): Promise<void>;
+  abstract setCurrency(userId: number, currency: string): Promise<void>;
 
   /**
    * Remove currency property for userId
