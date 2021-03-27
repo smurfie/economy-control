@@ -19,7 +19,8 @@ export abstract class UsersService {
   abstract get(id: number): Promise<User | undefined>;
 
   /**
-   * Adds the user and returns its newly created id. Username length must be between [5,20] both included
+   * Adds the user and returns its newly created id. Username length must be between
+   * [${UserConstants.USERNAME_MIN_LENGTH},${UserConstants.USERNAME_MAX_LENGTH}] both included
    * @param user
    */
   abstract add(user: UserWithoutId): Promise<number>;

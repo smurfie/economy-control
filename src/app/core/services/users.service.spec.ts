@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { User, UserWithoutId } from 'src/app/shared/models/user.model';
+import { User, UserConstants, UserWithoutId } from 'src/app/shared/models/user.model';
 import { DexieService } from './dexie/dexie.service';
 import { UserPropertiesService } from './user-properties.service';
 import { UsersService } from './users.service';
@@ -12,16 +12,16 @@ describe('UsersService', () => {
     username: 'User2',
   };
   const MOCK_USER_MIN_LENGTH: UserWithoutId = {
-    username: 'User1',
+    username: 'x'.repeat(UserConstants.USERNAME_MIN_LENGTH),
   };
   const MOCK_USER_MAX_LENGTH: UserWithoutId = {
-    username: 'User1234567890123456',
+    username: 'x'.repeat(UserConstants.USERNAME_MAX_LENGTH),
   };
   const MOCK_USER_ERROR_MIN_LENGTH: UserWithoutId = {
-    username: 'User',
+    username: 'x'.repeat(UserConstants.USERNAME_MIN_LENGTH - 1),
   };
   const MOCK_USER_ERROR_MAX_LENGTH: UserWithoutId = {
-    username: 'User12345678901234567',
+    username: 'x'.repeat(UserConstants.USERNAME_MAX_LENGTH + 1),
   };
   const USER_ID = 1;
   const USER_ID_2 = 2;
@@ -80,13 +80,13 @@ describe('UsersService', () => {
     expect(users.length).toBe(1);
   });
 
-  it('should add an username with exact 5 chars', async () => {
+  it('should add an username with exact ${UserConstants.USERNAME_MIN_LENGTH} chars', async () => {
     await usersService.add(MOCK_USER_MIN_LENGTH);
     const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(1);
   });
 
-  it('should not add an username with less than 5 chars', async () => {
+  it('should not add an username with less than ${UserConstants.USERNAME_MIN_LENGTH} chars', async () => {
     let error;
     try {
       await usersService.add(MOCK_USER_ERROR_MIN_LENGTH);
@@ -98,13 +98,13 @@ describe('UsersService', () => {
     expect(users.length).toBe(0);
   });
 
-  it('should add an username with exact 20 chars', async () => {
+  it('should add an username with exact ${UserConstants.USERNAME_MAX_LENGTH} chars', async () => {
     await usersService.add(MOCK_USER_MAX_LENGTH);
     const users = await usersService.getAllLocalUsers();
     expect(users.length).toBe(1);
   });
 
-  it('should not add an username with more than 20 chars', async () => {
+  it('should not add an username with more than ${UserConstants.USERNAME_MAX_LENGTH} chars', async () => {
     let error;
     try {
       await usersService.add(MOCK_USER_ERROR_MAX_LENGTH);

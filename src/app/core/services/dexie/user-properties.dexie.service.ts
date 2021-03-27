@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { UserProperty } from 'src/app/shared/models/user-property.model';
+import { UserProperty, UserPropertyConstants } from 'src/app/shared/models/user-property.model';
 import { UserPropertiesService } from '../user-properties.service';
 import { DexieService } from './dexie.service';
 
-const CURRENCY_ISO_CODE = 'currencyISOCode';
+const CURRENCY = 'currency';
 
 @Injectable()
 export class UserPropertiesDexieService implements UserPropertiesService {
@@ -13,16 +13,20 @@ export class UserPropertiesDexieService implements UserPropertiesService {
     this._table = this.dexieService.table('userProperties');
   }
 
-  getCurrency(userId: number): Promise<string | undefined> {
-    return this.getProperty(userId, CURRENCY_ISO_CODE);
+  async getCurrency(userId: number): Promise<string> {
+    const currency = await this.getProperty(userId, CURRENCY);
+    return currency || UserPropertyConstants.DEFAULT_CURRENCY;
   }
 
-  setCurrency(userId: number, currencyIsoCode: string): Promise<void> {
-    return this.setProperty(userId, CURRENCY_ISO_CODE, currencyIsoCode);
+  setCurrency(userId: number, currency: string): Promise<void> {
+    if (currency.length > UserPropertyConstants.CURRENCY_MAX_LENGTH) {
+      throw new Error(`Currency must be at most ${UserPropertyConstants.CURRENCY_MAX_LENGTH} characters long`);
+    }
+    return this.setProperty(userId, CURRENCY, currency);
   }
 
   removeCurrency(userId: number): Promise<void> {
-    return this.removeProperty(userId, CURRENCY_ISO_CODE);
+    return this.removeProperty(userId, CURRENCY);
   }
 
   private async getProperty(userId: number, propertyName: string): Promise<string | undefined> {

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-username.directive';
 import { AppURLS } from 'src/app/shared/models/url.model';
+import { UserConstants } from 'src/app/shared/models/user.model';
 import { CreateUserComponent } from './create-user.component';
 
 describe('CreateUserComponent', () => {
@@ -69,7 +70,7 @@ describe('CreateUserComponent', () => {
     });
 
     it('should show error username too short', () => {
-      input.value = 'test';
+      input.value = 'x'.repeat(UserConstants.USERNAME_MIN_LENGTH - 1);
       input.dispatchEvent(new Event('input'));
       fixture.detectChanges();
 
@@ -82,7 +83,7 @@ describe('CreateUserComponent', () => {
     });
 
     it('should show error username too long', () => {
-      input.value = 'twenty1characterslong';
+      input.value = 'x'.repeat(UserConstants.USERNAME_MAX_LENGTH + 1);
       input.dispatchEvent(new Event('input'));
       fixture.detectChanges();
 
@@ -153,7 +154,7 @@ describe('CreateUserComponent', () => {
       initializeComponents();
     });
 
-    ['5char', 'twenty_characteslong'].forEach((test) => {
+    ['x'.repeat(UserConstants.USERNAME_MIN_LENGTH), 'x'.repeat(UserConstants.USERNAME_MAX_LENGTH)].forEach((test) => {
       it(`should show no errors for string: ${test}`, async () => {
         input.value = test;
         input.dispatchEvent(new Event('input'));

@@ -1,11 +1,13 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { SettingsComponent } from '../components/settings/settings.component';
 import { SettingsPage } from './settings.page';
 
 describe('SettingsPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      declarations: [SettingsPage],
+      declarations: [SettingsPage, SettingsStubComponent],
     }).compileComponents();
   });
 
@@ -15,3 +17,6 @@ describe('SettingsPage', () => {
     expect(page).toBeTruthy();
   });
 });
+
+@Component({ selector: 'ec-settings', template: '' })
+class SettingsStubComponent implements Partial<SettingsComponent> {}
