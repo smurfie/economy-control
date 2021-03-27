@@ -11,7 +11,9 @@ import { UserPropertyConstants } from 'src/app/shared/models/user-property.model
 export class SettingsComponent {
   readonly CURRENCY_MAX_LENGTH = UserPropertyConstants.CURRENCY_MAX_LENGTH;
 
-  userId!: number;
+  userId: number | undefined;
+  isLoading = true;
+  isSaving = false;
 
   settingsForm = this.formBuilder.group({
     currency: ['', [Validators.required, Validators.maxLength(3)]],
@@ -27,15 +29,17 @@ export class SettingsComponent {
     private userPropertiesService: UserPropertiesService
   ) {
     this.usersService.getUserIdLoggedIn().then((userId) => {
-      this.userId = userId!;
-
-      this.userPropertiesService.getCurrency(this.userId).then((currency) => {
+      this.userId = userId;
+      this.userPropertiesService.getCurrency(this.userId!).then((currency) => {
         this.settingsForm.patchValue({ currency: currency });
+        this.isLoading = false;
       });
     });
   }
 
   async save() {
-    this.userPropertiesService.setCurrency(this.userId, this.currency!.value);
+    this.isSaving = true;
+    this.userPropertiesService.setCurrency(this.userId!, this.currency!.value);
+    this.isSaving = false;
   }
 }

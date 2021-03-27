@@ -1,4 +1,10 @@
-<form [formGroup]="settingsForm" (ngSubmit)="save()">
+<div *ngIf="isLoading" class="d-flex justify-content-center" data-testid="loading">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<form *ngIf="!isLoading" [formGroup]="settingsForm" (ngSubmit)="save()">
   <div class="row mb-3">
     <label for="currency" class="col-sm-2 col-form-label">Currency</label>
     <div class="col">
@@ -16,6 +22,9 @@
   </div>
 
   <div class="row mb-3">
-    <button class="btn btn-primary" type="submit" [disabled]="!settingsForm.valid">Save</button>
+    <button class="btn btn-primary" type="submit" [disabled]="!settingsForm.valid || isSaving">
+      <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Save
+    </button>
   </div>
 </form>
