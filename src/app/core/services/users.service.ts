@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User, UserWithoutId } from 'src/app/shared/models/user.model';
+import { User } from 'src/app/shared/models/user.model';
 import { UsersDexieService } from './dexie/users.dexie.service';
 
 @Injectable({
@@ -23,7 +23,7 @@ export abstract class UsersService {
    * [${UserConstants.USERNAME_MIN_LENGTH},${UserConstants.USERNAME_MAX_LENGTH}] both included
    * @param user
    */
-  abstract add(user: UserWithoutId): Promise<number>;
+  abstract add(username: string): Promise<number>;
 
   /**
    * Updates the user passed as parameter, if the id don't exists do nothing

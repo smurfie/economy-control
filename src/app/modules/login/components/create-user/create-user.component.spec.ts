@@ -184,7 +184,7 @@ describe('CreateUserComponent', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(usersService.add).toHaveBeenCalledWith({ username });
+      expect(usersService.add).toHaveBeenCalledWith(username);
       expect(usersService.login).toHaveBeenCalledWith(username);
       expect(router.navigate).toHaveBeenCalledWith([AppURLS.HOME]);
     });

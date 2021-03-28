@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User, UserConstants, UserWithoutId } from 'src/app/shared/models/user.model';
+import { User, UserConstants } from 'src/app/shared/models/user.model';
 import { UserPropertiesService } from '../user-properties.service';
 import { UsersService } from '../users.service';
 import { DexieService } from './dexie.service';
@@ -24,14 +24,14 @@ export class UsersDexieService implements UsersService {
     return this._table.get(id);
   }
 
-  add(user: UserWithoutId): Promise<number> {
-    if (user.username.length < UserConstants.USERNAME_MIN_LENGTH) {
+  add(username: string): Promise<number> {
+    if (username.length < UserConstants.USERNAME_MIN_LENGTH) {
       throw new Error(`Username must be at least ${UserConstants.USERNAME_MIN_LENGTH} characters long`);
     }
-    if (user.username.length > UserConstants.USERNAME_MAX_LENGTH) {
+    if (username.length > UserConstants.USERNAME_MAX_LENGTH) {
       throw new Error(`Username must be at most ${UserConstants.USERNAME_MAX_LENGTH} characters long`);
     }
-    return this._table.add(user as User);
+    return this._table.add({ username } as User);
   }
 
   update(user: User): Promise<number> {
@@ -48,8 +48,7 @@ export class UsersDexieService implements UsersService {
   }
 
   async login(username: string): Promise<User | undefined> {
-    const userWithourId: UserWithoutId = { username: username };
-    const user = await this._table.get(userWithourId);
+    const user = await this._table.get({ username });
     if (user) {
       this._userIdLoggedIn = user.id;
       this.setLastUserIdLoggedIn(user.id);

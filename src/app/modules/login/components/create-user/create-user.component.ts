@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { UsersService } from 'src/app/core/services/users.service';
 import { UniqueUsernameValidator } from 'src/app/shared/directives/unique-username.directive';
 import { AppURLS } from 'src/app/shared/models/url.model';
-import { UserConstants, UserWithoutId } from 'src/app/shared/models/user.model';
+import { UserConstants } from 'src/app/shared/models/user.model';
 
 @Component({
   selector: 'ec-create-user',
@@ -34,11 +34,8 @@ export class CreateUserComponent {
   ) {}
 
   async createAndLogin() {
-    const user: UserWithoutId = {
-      username: this.username?.value,
-    };
-    const userId = await this.usersService.add(user);
-    await this.usersService.login(user.username);
+    const userId = await this.usersService.add(this.username!.value);
+    await this.usersService.login(this.username!.value);
     this.usersService.setLastUserIdLoggedIn(userId);
 
     this.router.navigate([AppURLS.HOME]);

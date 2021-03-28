@@ -1,9 +1,6 @@
-export interface UserWithoutId {
-  username: string;
-}
-
-export interface User extends UserWithoutId {
+export interface User {
   id: number;
+  username: string;
 }
 
 export class UserConstants {

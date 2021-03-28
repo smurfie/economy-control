@@ -10,6 +10,7 @@ export class DexieService extends Dexie {
     this.version(1).stores({
       users: '++id, &username',
       userProperties: '[userId+propertyName], propertyValue',
+      categories: '++id, parentId, name',
     });
   }
 }

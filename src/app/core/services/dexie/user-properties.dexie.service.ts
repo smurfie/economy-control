@@ -7,7 +7,7 @@ const CURRENCY = 'currency';
 
 @Injectable()
 export class UserPropertiesDexieService implements UserPropertiesService {
-  private _table: Dexie.Table<UserProperty>;
+  private _table: Dexie.Table<UserProperty, [number, string]>;
 
   constructor(private dexieService: DexieService) {
     this._table = this.dexieService.table('userProperties');
